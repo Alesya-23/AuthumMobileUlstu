@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E67171"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_view_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/text_view_search"
+            app:layout_constraintEnd_toStartOf="@id/button_search"
+            app:layout_constraintRight_toRightOf="@id/containerLayout"
+            app:layout_constraintStart_toStartOf="@id/containerLayout"
+            app:layout_constraintTop_toTopOf="@id/containerLayout" />
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            app:layout_constraintBottom_toTopOf="@id/text_view_search"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toEndOf="@id/text_view_name"
+            app:layout_constraintTop_toTopOf="@id/containerLayout" />
+
+        <EditText
+            android:id="@+id/text_view_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="mdkvmvdfvmdfkvdfmvkvdmvk"
+            app:layout_constraintBottom_toTopOf="@id/layout"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toEndOf="@id/containerLayout"
+            app:layout_constraintTop_toBottomOf="@id/button_search" />
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/list"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toEndOf="@id/containerLayout"
+            app:layout_constraintTop_toBottomOf="@id/text_view_search">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_add"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/add" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_refresh"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/refresh" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="@id/containerLayout"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toStartOf="@id/containerLayout"
+            app:layout_constraintTop_toBottomOf="@id/layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

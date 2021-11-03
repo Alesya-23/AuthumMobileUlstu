@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AuthmMobileUlstu</string>
+    <string name="delete">Удалить</string>
+    <string name="refresh">Изменить</string>
+    <string name="add">Добавить</string>
+    <string name="search">Поиск</string>
+    <string name="Ok">Ок</string>
+    <string name="Cancel">Отмена</string>
+    <string name="old_element">Изначальный элемент: </string>
+</resources>

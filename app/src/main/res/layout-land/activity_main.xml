@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="true"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_view_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/list"
+            app:layout_constraintEnd_toStartOf="@id/text_view_null"
+            app:layout_constraintRight_toRightOf="@id/containerLayout"
+            app:layout_constraintStart_toStartOf="@id/containerLayout"
+            app:layout_constraintTop_toTopOf="@id/containerLayout" />
+
+        <Button
+            android:id="@+id/button_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
+            android:text="Button_one"
+            app:layout_constraintBottom_toTopOf="@id/layout"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toStartOf="@id/containerLayout"
+            app:layout_constraintTop_toBottomOf="@id/list" />
+
+        <EditText
+            android:id="@+id/text_view_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mdkvmvdfvmdfkvdfmvkvdmvk"
+            app:layout_constraintBottom_toTopOf="@id/list"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toEndOf="@id/text_view_name"
+            app:layout_constraintTop_toTopOf="@id/containerLayout" />
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/containerLayout"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toEndOf="@id/containerLayout"
+            app:layout_constraintTop_toBottomOf="@id/button_one">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_in_linearlayout_one"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:text="one" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_in_linearlayout_two"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:text="two" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_in_linearlayout_three"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:text="three" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/button_one"
+            app:layout_constraintEnd_toEndOf="@id/containerLayout"
+            app:layout_constraintStart_toEndOf="@id/containerLayout"
+            app:layout_constraintTop_toBottomOf="@id/text_view_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
