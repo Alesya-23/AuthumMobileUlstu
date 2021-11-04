@@ -20,9 +20,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun openDisplayResultActivity(list: ArrayList<String>) {
+    fun openDisplayResultActivity(list: ArrayList<ItemList>) {
         val intent = Intent(this, ResultSearchActivity::class.java)
-        intent.putStringArrayListExtra("KEY_SEARCH_ELEMENT", list)
+        intent.putExtra("KEY_SEARCH_ELEMENT", list)
         startActivity(intent)
     }
 }

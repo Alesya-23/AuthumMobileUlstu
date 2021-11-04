@@ -14,7 +14,7 @@ class ResultSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_seach)
         listView = findViewById(R.id.listview)
-        val list = intent.getStringArrayListExtra(KEY_SEARCH_ELEMENT) as ArrayList<String>
+        val list = intent.getStringArrayListExtra(KEY_SEARCH_ELEMENT) as ArrayList<ItemList>
         val arrayAdapter = ArrayAdapter(
             this.applicationContext, R.layout.list_item, list
         )

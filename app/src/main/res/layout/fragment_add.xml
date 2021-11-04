@@ -9,10 +9,47 @@
     android:orientation="vertical"
     tools:context=".FragmentAdd">
 
-    <EditText
-        android:id="@+id/add_dance_element_edit"
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:text="@string/id_input"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/add_dance_element_id_edit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="15dp"
+        android:inputType="numberPassword"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:text="@string/in_name_dance"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/add_dance_name_element_edit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="15dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:text="@string/in_date"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/add_dance_date_element_edit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="15dp" />
 
     <Button
         android:id="@+id/ok_add"

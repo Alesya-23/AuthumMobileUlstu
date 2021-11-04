@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.laba.authmmobileulstu.databinding.FragmentRefreshBinding
+import java.time.LocalDate
 
 class FragmentRefresh : Fragment(R.layout.fragment_refresh) {
     private lateinit var viewBindingRefresh: FragmentRefreshBinding
@@ -14,20 +15,27 @@ class FragmentRefresh : Fragment(R.layout.fragment_refresh) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBindingRefresh = FragmentRefreshBinding.bind(view)
-        viewBindingRefresh.buttonSet.setOnClickListener {
+        viewBindingRefresh.okAdd.setOnClickListener {
             onClickButtonAdd()
         }
-        viewBindingRefresh.buttonCancel.setOnClickListener {
+        viewBindingRefresh.cancel.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
-        var oldItem = userViewModel.newItem.value
-        viewBindingRefresh.textViewData.text = String.format("Старый вариант : $oldItem")
+        var oldItemId = userViewModel.newItem.value?.id
+        var oldItemName = userViewModel.newItem.value?.nameDance
+        var oldItemDate = userViewModel.newItem.value?.DateCreate
+        viewBindingRefresh.inId.text = String.format("Старый вариант ID: $oldItemId")
+        viewBindingRefresh.inName.text = String.format("Старый вариант названия: $oldItemName")
+        viewBindingRefresh.inDate.text = String.format("Старый вариант даты: $oldItemDate")
     }
 
     private fun onClickButtonAdd() {
-        if (viewBindingRefresh.editTextTextData.text.toString().isNotEmpty()) {
-            userViewModel.newItem.value =
-                viewBindingRefresh.editTextTextData.text.toString()
+        val newDanceName = viewBindingRefresh.addDanceNameElementEdit.text
+        val newDanceId  = viewBindingRefresh.addDanceElementIdEdit.text.toString()
+        val newDanceDate = viewBindingRefresh.addDanceDateElementEdit.text
+        if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && newDanceDate.isNotEmpty()) {
+            userViewModel.newItem.value = ItemList(Integer.parseInt(newDanceId), newDanceName.toString(),
+                LocalDate.parse(newDanceDate))
             requireActivity().supportFragmentManager.popBackStack()
         } else Toast.makeText(
             activity?.applicationContext,

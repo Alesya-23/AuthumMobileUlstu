@@ -3,18 +3,22 @@ package com.laba.authmmobileulstu
 import android.os.Bundle
 import android.util.SparseBooleanArray
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.laba.authmmobileulstu.databinding.FragmentMainBinding
+import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var viewMainFragmentBinding: FragmentMainBinding
-    var arrayAdapter: ArrayAdapter<*>? = null
-    private var list = ArrayList<String>()
+    var arrayAdapter: ItemListAdapter? = null
+    private var list = ArrayList<ItemList>()
+    private var jsonHelper: JSONHelper = JSONHelper()
     private lateinit var checkedItemPositions: SparseBooleanArray
     private val userViewModel: MyViewModel by activityViewModels()
 
@@ -23,6 +27,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewMainFragmentBinding = FragmentMainBinding.bind(view)
         initializationButton()
         initializationList()
+        open()
         userViewModel.itemList.observe(viewLifecycleOwner, Observer {
             addNewItem(it)
             arrayAdapter?.notifyDataSetChanged()
@@ -37,11 +42,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         })
     }
 
-    override fun onSaveInstanceState(savedState: Bundle) {
-        super.onSaveInstanceState(savedState)
-        savedState.putStringArrayList("list", list)
-    }
-
     companion object {
         fun newInstance(): MainFragment {
             val args = Bundle()
@@ -52,15 +52,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun initializationList() {
-        list.add("Hip-hop")
-        list.add("Break")
-        list.add("Vog")
-        list.add("Locking")
+//        list.add(ItemList(1, "Hip-hop", LocalDate.parse("2020-01-21")))
+//        list.add(ItemList(2, "Break", LocalDate.parse("2003-08-11")))
+//        list.add(ItemList(3, "Vog", LocalDate.parse("2010-05-21")))
+//        list.add(ItemList(4, "Locking", LocalDate.parse("2003-08-11")))
         viewMainFragmentBinding?.list?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         arrayAdapter = activity?.let {
-            ArrayAdapter(
-                it.applicationContext,
-                R.layout.list_item, list
+            ItemListAdapter(
+                it.applicationContext, list
             )
         }
         viewMainFragmentBinding.list.adapter = arrayAdapter
@@ -75,11 +74,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             .commit()
     }
 
-    private fun addNewItem(itemView: String) {
+    private fun addNewItem(itemView: ItemList) {
         list.add(itemView)
     }
 
-    private fun deleteItems(): ArrayList<String> {
+    private fun deleteItems(): ArrayList<ItemList> {
         if (userViewModel.deleteFlag.value == true) {
             val checkedItemPositions: SparseBooleanArray =
                 viewMainFragmentBinding?.list?.checkedItemPositions
@@ -112,7 +111,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun changeItem() {
         val key: Int? = userViewModel.itemKey.value
-        list[key!!] = userViewModel.newItem.value.toString()
+        list[key!!] = userViewModel.newItem.value!!
     }
 
     private fun onClickDelete() {
@@ -140,9 +139,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun openResultActivity() {
         if (viewMainFragmentBinding.textViewSearch.text.isNotEmpty()) {
             val substring: String = viewMainFragmentBinding.textViewSearch.text.toString()
-            val newList = ArrayList<String>()
+            val newList = ArrayList<ItemList>()
             for (i in list.indices) {
-                if (list[i] == substring) {
+                if (list[i].nameDance == substring) {
                     newList.add(list[i])
                 }
             }
@@ -167,6 +166,37 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             buttonDelete.setOnClickListener { onClickDelete() }
             buttonRefresh.setOnClickListener { onCLickRefresh() }
             buttonSearch.setOnClickListener { openResultActivity() }
+        }
+    }
+
+    fun save() {
+        val result: Boolean = jsonHelper.exportToJSON(requireActivity().applicationContext, list)
+        if (result) {
+            Toast.makeText(activity?.applicationContext, "Данные сохранены", Toast.LENGTH_LONG)
+                .show()
+        } else {
+            Toast.makeText(
+                activity?.applicationContext,
+                "Не удалось сохранить данные",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    fun open() {
+        list = jsonHelper.importFromJSON(requireActivity().applicationContext)!!
+        if (list != null) {
+            arrayAdapter = activity?.applicationContext?.let { ItemListAdapter(it, list) }
+            viewMainFragmentBinding?.list?.adapter = arrayAdapter
+            Toast.makeText(activity?.applicationContext, "Данные восстановлены", Toast.LENGTH_LONG)
+                .show()
+        } else {
+            Toast.makeText(
+                activity?.applicationContext,
+                "Не удалось открыть данные",
+                Toast.LENGTH_LONG
+            )
+                .show()
         }
     }
 }

@@ -1,70 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:orientation="vertical"
     android:background="#8EC582"
     tools:context=".FragmentRefresh">
 
-    <LinearLayout
-        android:id="@+id/layout_data"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/in_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:layout_margin="30dp"
+        android:text="@string/id_input"
+        android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/textViewData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/old_element"
-            android:visibility="visible" />
+    <EditText
+        android:id="@+id/add_dance_element_id_edit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="15dp"
+        android:inputType="numberPassword"/>
 
-        <EditText
-            android:id="@+id/editTextTextData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:autofillHints=""
-            android:ems="10"
-            tools:ignore="LabelFor" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_buttons"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/in_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_data">
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:text="@string/in_name_dance"
+        android:textStyle="bold"/>
 
-        <Button
-            android:id="@+id/buttonSet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="@string/Ok"
-            tools:ignore="ButtonStyle" />
+    <EditText
+        android:id="@+id/add_dance_name_element_edit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="15dp" />
 
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="@string/Cancel"
-            tools:ignore="ButtonStyle" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/in_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:text="@string/in_date"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/add_dance_date_element_edit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="15dp" />
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/ok_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/Ok" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/Cancel" />
+
+</LinearLayout>
