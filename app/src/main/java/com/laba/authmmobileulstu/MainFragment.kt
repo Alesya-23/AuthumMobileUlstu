@@ -27,7 +27,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewMainFragmentBinding = FragmentMainBinding.bind(view)
         initializationButton()
         initializationList()
-        open()
+            open()
         userViewModel.itemList.observe(viewLifecycleOwner, Observer {
             addNewItem(it)
             arrayAdapter?.notifyDataSetChanged()
@@ -52,8 +52,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun initializationList() {
-//        list.add(ItemList(1, "Hip-hop", LocalDate.parse("2020-01-21")))
-//        list.add(ItemList(2, "Break", LocalDate.parse("2003-08-11")))
+     //   list.add(ItemList(1, "Hip-hop", LocalDate.parse("2020-01-21")))
+     //   list.add(ItemList(2, "Break", LocalDate.parse("2003-08-11")))
 //        list.add(ItemList(3, "Vog", LocalDate.parse("2010-05-21")))
 //        list.add(ItemList(4, "Locking", LocalDate.parse("2003-08-11")))
         viewMainFragmentBinding?.list?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
@@ -76,6 +76,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun addNewItem(itemView: ItemList) {
         list.add(itemView)
+        save()
     }
 
     private fun deleteItems(): ArrayList<ItemList> {
@@ -170,7 +171,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     fun save() {
-        val result: Boolean = jsonHelper.exportToJSON(requireActivity().applicationContext, list)
+        val result: Boolean = activity?.let { jsonHelper.exportToJSON(it.applicationContext, list) }!!
         if (result) {
             Toast.makeText(activity?.applicationContext, "Данные сохранены", Toast.LENGTH_LONG)
                 .show()
@@ -184,7 +185,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     fun open() {
-        list = jsonHelper.importFromJSON(requireActivity().applicationContext)!!
+        list = activity?.let { jsonHelper.loadDataFromJson(it.applicationContext) }!!
         if (list != null) {
             arrayAdapter = activity?.applicationContext?.let { ItemListAdapter(it, list) }
             viewMainFragmentBinding?.list?.adapter = arrayAdapter

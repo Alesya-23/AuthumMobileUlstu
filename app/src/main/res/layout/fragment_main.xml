@@ -85,7 +85,7 @@
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             app:layout_constraintBottom_toBottomOf="@id/containerLayout"
             app:layout_constraintEnd_toEndOf="@id/containerLayout"
             app:layout_constraintStart_toStartOf="@id/containerLayout"

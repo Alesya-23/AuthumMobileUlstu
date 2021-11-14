@@ -1,0 +1,19 @@
+{
+  "ItemLists": [
+    {
+      "ID": 1,
+      "NameItemList": "Jazz",
+      "DateCreate": "1984-04-12"
+    },
+    {
+      "ID": 2,
+      "NameItemList": "Vals",
+      "DateCreate": "1964-04-12"
+    },
+    {
+      "ID": 3,
+      "NameItemList": "Salsa",
+      "DateCreate": "1984-04-12"
+    }
+  ]
+}
