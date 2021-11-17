@@ -12,5 +12,5 @@ data class ItemList(
     @SerializedName("NameDance")
     val nameDance: String,
     @SerializedName("DateCreate")
-    val DateCreate: LocalDate
+    val isModernDance: Boolean
 )

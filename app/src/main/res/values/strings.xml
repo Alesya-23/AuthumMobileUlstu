@@ -9,5 +9,5 @@
     <string name="old_element">Изначальный элемент: </string>
     <string name="id_input">Введите ID</string>
     <string name="in_name_dance">Введите название танца</string>
-    <string name="in_date">Введите дату</string>
+    <string name="in_date">Введите современный или нет танец (да/нет)</string>
 </resources>

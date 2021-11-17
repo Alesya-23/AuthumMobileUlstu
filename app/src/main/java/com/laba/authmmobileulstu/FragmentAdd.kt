@@ -26,12 +26,22 @@ class FragmentAdd : Fragment(R.layout.fragment_add) {
     private fun onClickButtonAdd() {
         val newDanceName = viewbindingadd.addDanceNameElementEdit.text
         val newDanceId  = viewbindingadd.addDanceElementIdEdit.text.toString()
-        val newDanceDate = viewbindingadd.addDanceDateElementEdit.text
-        if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && newDanceDate.isNotEmpty()) {
+        var isModern = viewbindingadd.addDanceIsModern.text.toString()
+        var isDanceModern = checkIsDanceModer(isModern)
+        if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && isModern.isNotEmpty()) {
             userViewModel.setItem(ItemList(Integer.parseInt(newDanceId), newDanceName.toString(),
-                LocalDate.parse(newDanceDate)))
+                isDanceModern ))
             requireActivity().supportFragmentManager.popBackStack()
             Toast.makeText(context, "Добавлено", Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun checkIsDanceModer(isModern : String) : Boolean{
+        if(isModern == "Да" || isModern == "да" || isModern == "Yes" || isModern == "yes" )
+            return true
+        else   if(isModern == "Нет" || isModern == "нет" || isModern == "No" || isModern == "no")
+            return false
+        Toast.makeText(context, "Неверный критерий современности танца", Toast.LENGTH_LONG).show()
+        return false
     }
 }

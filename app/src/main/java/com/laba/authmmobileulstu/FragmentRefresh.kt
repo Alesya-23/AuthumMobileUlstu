@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.laba.authmmobileulstu.databinding.FragmentRefreshBinding
-import java.time.LocalDate
 
 class FragmentRefresh : Fragment(R.layout.fragment_refresh) {
     private lateinit var viewBindingRefresh: FragmentRefreshBinding
@@ -23,7 +22,7 @@ class FragmentRefresh : Fragment(R.layout.fragment_refresh) {
         }
         var oldItemId = userViewModel.newItem.value?.id
         var oldItemName = userViewModel.newItem.value?.nameDance
-        var oldItemDate = userViewModel.newItem.value?.DateCreate
+        var oldItemDate = userViewModel.newItem.value?.isModernDance
         viewBindingRefresh.inId.text = String.format("Старый вариант ID: $oldItemId")
         viewBindingRefresh.inName.text = String.format("Старый вариант названия: $oldItemName")
         viewBindingRefresh.inDate.text = String.format("Старый вариант даты: $oldItemDate")
@@ -32,15 +31,25 @@ class FragmentRefresh : Fragment(R.layout.fragment_refresh) {
     private fun onClickButtonAdd() {
         val newDanceName = viewBindingRefresh.addDanceNameElementEdit.text
         val newDanceId  = viewBindingRefresh.addDanceElementIdEdit.text.toString()
-        val newDanceDate = viewBindingRefresh.addDanceDateElementEdit.text
-        if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && newDanceDate.isNotEmpty()) {
-            userViewModel.newItem.value = ItemList(Integer.parseInt(newDanceId), newDanceName.toString(),
-                LocalDate.parse(newDanceDate))
+        var isModern = viewBindingRefresh.addDanceIsModern.text.toString()
+        var isDanceModern = checkIsDanceModer(isModern)
+        if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && isModern.isNotEmpty()) {
+            userViewModel.newItem.value = (ItemList(Integer.parseInt(newDanceId), newDanceName.toString(),
+                isDanceModern ))
             requireActivity().supportFragmentManager.popBackStack()
         } else Toast.makeText(
             activity?.applicationContext,
             "Ошибка! Не введено новое значение",
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    fun checkIsDanceModer(isModern : String) : Boolean{
+        if(isModern == "Да" || isModern == "да" || isModern == "Yes" || isModern == "yes" )
+            return true
+        else   if(isModern == "Нет" || isModern == "нет" || isModern == "No" || isModern == "no")
+            return false
+        Toast.makeText(context, "Неверный критерий современности танца", Toast.LENGTH_LONG).show()
+        return false
     }
 }

@@ -53,8 +53,8 @@ class JSONHelper {
                 val item = jsonArray.getJSONObject(i)
                 val id = item.getInt("ID")
                 val nameDance = item.getString("NameItemList")
-                val dateCreateDance = item.getString("DateCreate")
-                dataItems.add(ItemList(id, nameDance, LocalDate.parse(dateCreateDance)))
+                val isModernDance = item.getBoolean("isModernDance")
+                dataItems.add(ItemList(id, nameDance, isModernDance))
             }
             return dataItems
         } catch (e: JSONException) {

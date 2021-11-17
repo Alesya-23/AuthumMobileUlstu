@@ -34,7 +34,7 @@ class ItemListAdapter( val context: Context, val dataSource : ArrayList<ItemList
         val item = getItem(position) as ItemList
         textViewId.text = item.id.toString()
         textViewName.text = item.nameDance
-        textViewDate.text = item.DateCreate.toString()
+        textViewDate.text = item.isModernDance.toString()
         return rowView
     }
 
