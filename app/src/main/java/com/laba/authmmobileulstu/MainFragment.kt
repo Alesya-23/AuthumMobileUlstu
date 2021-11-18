@@ -8,8 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.laba.authmmobileulstu.database.DatabaseHelper
 import com.laba.authmmobileulstu.databinding.FragmentMainBinding
-import java.time.LocalDate
+import com.laba.database.DanceStorage
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -21,13 +22,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private var jsonHelper: JSONHelper = JSONHelper()
     private lateinit var checkedItemPositions: SparseBooleanArray
     private val userViewModel: MyViewModel by activityViewModels()
+    private var typeData: String = "DATABASE"
+    var storage: DanceStorage? = null
+    var dbHelper: DatabaseHelper? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewMainFragmentBinding = FragmentMainBinding.bind(view)
         initializationButton()
         initializationList()
-            open()
+        open()
         userViewModel.itemList.observe(viewLifecycleOwner, Observer {
             addNewItem(it)
             arrayAdapter?.notifyDataSetChanged()
@@ -43,19 +47,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     companion object {
-        fun newInstance(): MainFragment {
+        fun newInstance(typeDataNow: String): MainFragment {
             val args = Bundle()
             val fragment = MainFragment()
             fragment.arguments = args
+            fragment.typeData = typeDataNow
             return fragment
         }
     }
 
     private fun initializationList() {
-     //   list.add(ItemList(1, "Hip-hop", LocalDate.parse("2020-01-21")))
-     //   list.add(ItemList(2, "Break", LocalDate.parse("2003-08-11")))
-//        list.add(ItemList(3, "Vog", LocalDate.parse("2010-05-21")))
-//        list.add(ItemList(4, "Locking", LocalDate.parse("2003-08-11")))
         viewMainFragmentBinding?.list?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         arrayAdapter = activity?.let {
             ItemListAdapter(
@@ -76,7 +77,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun addNewItem(itemView: ItemList) {
         list.add(itemView)
-        save()
+        if (typeData == "DATABASE") {
+            storage!!.insert(itemView)
+        } else save()
     }
 
     private fun deleteItems(): ArrayList<ItemList> {
@@ -87,6 +90,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             for (i in list.size - 1 downTo 0) {
                 if (checkedItemPositions[i]) {
                     countSelect++
+                    if (typeData == "DATABASE") {
+                        storage?.delete(list[i])
+                    }
+                    else  jsonHelper.deleteFile()
                     list.removeAt(i)
                 }
             }
@@ -113,6 +120,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun changeItem() {
         val key: Int? = userViewModel.itemKey.value
         list[key!!] = userViewModel.newItem.value!!
+        if (typeData == "DATABASE") {
+            storage!!.update(list[key])
+        } else save()
     }
 
     private fun onClickDelete() {
@@ -170,21 +180,26 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    fun save() {
-        val result: Boolean = activity?.let { jsonHelper.exportToJSON(it.applicationContext, list) }!!
-        if (result) {
-            Toast.makeText(activity?.applicationContext, "Данные сохранены", Toast.LENGTH_LONG)
-                .show()
-        } else {
-            Toast.makeText(
-                activity?.applicationContext,
-                "Не удалось сохранить данные",
-                Toast.LENGTH_LONG
-            ).show()
+    private fun save() {
+        if (typeData == "JSON") {
+            val result: Boolean =
+                activity?.let { jsonHelper.exportToJSON(it.applicationContext, list) }!!
+            if (result) {
+                Toast.makeText(activity?.applicationContext, "Данные сохранены", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                Toast.makeText(
+                    activity?.applicationContext,
+                    "Не удалось сохранить данные",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 
-    fun open() {
+    private fun open() {
+        dbHelper = activity?.applicationContext?.let { DatabaseHelper(it) }
+        storage = activity?.applicationContext?.let { DanceStorage() }
         list = activity?.let { jsonHelper.loadDataFromJson(it.applicationContext) }!!
         if (list != null) {
             arrayAdapter = activity?.applicationContext?.let { ItemListAdapter(it, list) }

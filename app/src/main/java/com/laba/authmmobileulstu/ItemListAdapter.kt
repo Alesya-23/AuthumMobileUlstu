@@ -10,9 +10,10 @@ import android.widget.Adapter
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class ItemListAdapter( val context: Context, val dataSource : ArrayList<ItemList>) : BaseAdapter() {
-    private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+class ItemListAdapter(val context: Context, val dataSource: ArrayList<ItemList>) : BaseAdapter() {
+    private val inflater: LayoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
     override fun getCount(): Int {
         return dataSource.size
     }

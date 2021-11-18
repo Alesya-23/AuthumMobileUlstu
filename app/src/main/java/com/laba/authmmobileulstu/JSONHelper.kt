@@ -6,17 +6,15 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
-import java.time.LocalDate
-import java.io.File
 
 
 class JSONHelper {
-    private val fileName = "user.json"
+    private val  fileName: String = "user.json"
     fun exportToJSON(context: Context, dataList: ArrayList<ItemList>): Boolean {
         val gson = Gson()
         val jsonString = gson.toJson(dataList)
         try {
-            val fos: FileOutputStream = context.openFileOutput("filename", Context.MODE_PRIVATE)
+            val fos: FileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
             fos.write(jsonString.toByteArray())
             fos.close()
             return true
@@ -35,7 +33,7 @@ class JSONHelper {
             val buffer = ByteArray(size)
             inputStream.read(buffer)
             inputStream.close()
-            json= String(buffer)
+            json = String(buffer)
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {
@@ -62,4 +60,16 @@ class JSONHelper {
         }
         return null
     }
+
+    fun deleteFile() {
+        val fdelete: File = File(fileName)
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                println("file Deleted :$fileName")
+            } else {
+                println("file not Deleted :$fileName")
+            }
+        }
+    }
+
 }

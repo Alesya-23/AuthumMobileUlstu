@@ -2,6 +2,7 @@ package com.laba.authmmobileulstu
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
@@ -12,13 +13,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            var mainFragment: MainFragment = MainFragment.newInstance()
+            var chooseTypeStorage: FragmentChooseTypeStorage = FragmentChooseTypeStorage()
             supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.activity_main, mainFragment)
+                .addToBackStack(FragmentChooseTypeStorage::class.simpleName)
+                .replace(R.id.activity_main, chooseTypeStorage)
                 .commit()
         }
     }
+
 
     fun openDisplayResultActivity(list: ArrayList<ItemList>) {
         val intent = Intent(this, ResultSearchActivity::class.java)

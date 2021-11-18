@@ -20,19 +20,19 @@ class FragmentRefresh : Fragment(R.layout.fragment_refresh) {
         viewBindingRefresh.cancel.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
-        var oldItemId = userViewModel.newItem.value?.id
-        var oldItemName = userViewModel.newItem.value?.nameDance
-        var oldItemDate = userViewModel.newItem.value?.isModernDance
+        val oldItemId = userViewModel.newItem.value?.id
+        val oldItemName = userViewModel.newItem.value?.nameDance
+        val oldItemDate = userViewModel.newItem.value?.isModernDance
         viewBindingRefresh.inId.text = String.format("Старый вариант ID: $oldItemId")
         viewBindingRefresh.inName.text = String.format("Старый вариант названия: $oldItemName")
-        viewBindingRefresh.inDate.text = String.format("Старый вариант даты: $oldItemDate")
+        viewBindingRefresh.inDate.text = String.format("Старый критерия современности: $oldItemDate")
     }
 
     private fun onClickButtonAdd() {
         val newDanceName = viewBindingRefresh.addDanceNameElementEdit.text
         val newDanceId  = viewBindingRefresh.addDanceElementIdEdit.text.toString()
-        var isModern = viewBindingRefresh.addDanceIsModern.text.toString()
-        var isDanceModern = checkIsDanceModer(isModern)
+        val isModern = viewBindingRefresh.addDanceIsModern.text.toString()
+        val isDanceModern = checkIsDanceModer(isModern)
         if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && isModern.isNotEmpty()) {
             userViewModel.newItem.value = (ItemList(Integer.parseInt(newDanceId), newDanceName.toString(),
                 isDanceModern ))

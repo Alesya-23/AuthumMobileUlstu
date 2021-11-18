@@ -8,9 +8,9 @@ import java.util.*
 
 data class ItemList(
     @SerializedName("ID")
-    val id: Int,
+    var id: Int,
     @SerializedName("NameDance")
-    val nameDance: String,
+    var nameDance: String,
     @SerializedName("DateCreate")
-    val isModernDance: Boolean
+    var isModernDance: Boolean
 )
