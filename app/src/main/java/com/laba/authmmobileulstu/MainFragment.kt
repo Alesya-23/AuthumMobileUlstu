@@ -1,18 +1,22 @@
 package com.laba.authmmobileulstu
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.SparseBooleanArray
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.laba.authmmobileulstu.database.DatabaseHelper
 import com.laba.authmmobileulstu.databinding.FragmentMainBinding
-import com.laba.database.DanceStorage
-import java.util.*
-import kotlin.collections.ArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -23,8 +27,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var checkedItemPositions: SparseBooleanArray
     private val userViewModel: MyViewModel by activityViewModels()
     private var typeData: String = "DATABASE"
-    var storage: DanceStorage? = null
     var dbHelper: DatabaseHelper? = null
+    var sPref: SharedPreferences? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +36,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         initializationButton()
         initializationList()
         open()
+        sPref = activity?.applicationContext?.getSharedPreferences("Dance.db", MODE_PRIVATE)
         userViewModel.itemList.observe(viewLifecycleOwner, Observer {
             addNewItem(it)
             arrayAdapter?.notifyDataSetChanged()
@@ -181,11 +186,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun save() {
+        var result: Boolean = false
         if (typeData == "JSON") {
-            val result: Boolean =
-                activity?.let { jsonHelper.exportToJSON(it.applicationContext, list) }!!
+            CoroutineScope(Dispatchers.IO).launch {
+                result =
+                    jsonHelper.exportToJSON((activity as MainActivity).applicationContext, list)
+            }
             if (result) {
-                Toast.makeText(activity?.applicationContext, "Данные сохранены", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    activity?.applicationContext,
+                    "Данные сохранены",
+                    Toast.LENGTH_LONG
+                )
                     .show()
             } else {
                 Toast.makeText(
@@ -199,8 +211,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun open() {
         dbHelper = activity?.applicationContext?.let { DatabaseHelper(it) }
-        storage = activity?.applicationContext?.let { DanceStorage() }
-        list = activity?.let { jsonHelper.loadDataFromJson(it.applicationContext) }!!
+        list = (activity as MainActivity).getService().getList() as ArrayList<ItemList>
+//        list = jsonHelper.loadDataFromJson((activity as MainActivity).applicationContext)!!
+        CoroutineScope(Dispatchers.IO).launch {
+            list = (jsonHelper.loadDataFromJson((activity as MainActivity).applicationContext) as ArrayList<ItemList>?)!!
+        }
         if (list != null) {
             arrayAdapter = activity?.applicationContext?.let { ItemListAdapter(it, list) }
             viewMainFragmentBinding?.list?.adapter = arrayAdapter
@@ -213,6 +228,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 Toast.LENGTH_LONG
             )
                 .show()
+        }
+    }
+
+    fun savePrefs(view: View?) {
+        val gson = Gson()
+        val dataItems = DataItems()
+        dataItems.setUsers(list)
+        val jsonString = gson.toJson(dataItems)
+        val prefsEditor = sPref!!.edit()
+        prefsEditor.putString("MyObject", jsonString)
+        prefsEditor.commit()
+        Toast.makeText(activity?.applicationContext, "Данные сохранены", Toast.LENGTH_LONG).show()
+    }
+
+    fun loadPrefs(view: View?) {
+        val gson = Gson()
+        val json = sPref!!.getString("MyObject", "")
+        val obj: DataItems = gson.fromJson(json, DataItems::class.java)
+        list = obj.getUsers() as ArrayList<ItemList>
+        if (list != null) {
+            arrayAdapter = activity?.applicationContext?.let { ItemListAdapter(it, list) }
+            viewMainFragmentBinding?.list?.adapter = arrayAdapter
+            Toast.makeText(activity?.applicationContext, "Данные восстановлены Prefs", Toast.LENGTH_LONG).show()
         }
     }
 }

@@ -1,110 +1,91 @@
 package com.laba.database
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-
-import android.database.sqlite.SQLiteDatabase
+import android.database.DatabaseUtils
 import com.laba.authmmobileulstu.ItemList
 import com.laba.authmmobileulstu.database.DatabaseHelper
-import java.lang.Boolean
 
 
 const val TABLE = "Dance"
-const val COLUMN_ID = "Id"
+const val COLUMN_ID = "id"
 const val COLUMN_NAME = "nameDance"
 const val COLUMN_IS_MODERN = "isModernDance"
 
-class DanceStorage {
-    var sqlHelper: DatabaseHelper? = null
-    var db: SQLiteDatabase? = null
+class DanceStorage(context: Context) {
+    private var sqlHelper: DatabaseHelper = DatabaseHelper(context)
+    private var db = sqlHelper.writableDatabase
 
-    fun open(): DanceStorage? {
-        db = sqlHelper?.writableDatabase
+    fun open(): DanceStorage {
+        db = sqlHelper.writableDatabase
         return this
     }
 
     fun close() {
-        db!!.close()
+        db.close()
     }
 
-    @SuppressLint("Recycle")
-    fun getFullList(): List<ItemList?>? {
-        val cursor: Cursor = db!!.rawQuery("select * from $TABLE", null)
+    fun getFullList(): List<ItemList?> {
+        val database = sqlHelper.readableDatabase
+        val cursor: Cursor = database.rawQuery("select * from $TABLE", null)
         val list: MutableList<ItemList?> = ArrayList()
         if (!cursor.moveToFirst()) {
             return list
         }
         do {
-            val obj:ItemList = ItemList(1, "fvdf", false)
-            obj.id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID) as Int)
-            obj.nameDance = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
-            obj.isModernDance = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(
-                COLUMN_IS_MODERN
-            )))
-            list.add(obj)
+            var id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID))
+            var name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
+            var isModern = cursor.getString(cursor.getColumnIndex(COLUMN_IS_MODERN))
+            list.add(ItemList(id, name, isModern.toBoolean()))
             cursor.moveToNext()
         } while (!cursor.isAfterLast)
+        cursor.close()
+        database.close()
         return list
     }
 
-    @SuppressLint("Recycle")
-    fun getFilteredList(model: ItemList?): List<ItemList?>? {
-        val cursor: Cursor = db!!.rawQuery("select * from $TABLE", null)
-        val list: MutableList<ItemList?> = ArrayList()
-        if (!cursor.moveToFirst()) {
-            return list
-        }
-        do {
-            var obj:ItemList = ItemList(1, "fvdf", false)
-            obj.id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID) as Int)
-            obj.nameDance = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
-            obj.isModernDance = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(
-                COLUMN_IS_MODERN
-            )))
-            list.add(obj)
-            cursor.moveToNext()
-        } while (!cursor.isAfterLast)
-        return list
-    }
-
-    fun getElement(model: ItemList): ItemList? {
-        val cursor: Cursor = db!!.rawQuery(
+    fun getElement(id: Int): ItemList? {
+        val database = sqlHelper.readableDatabase
+        val cursor: Cursor = database.rawQuery(
             "select * from " + TABLE + " where "
-                    + COLUMN_ID + " = " + model.id, null
+                    + COLUMN_ID + " = " + id, null
         )
-        val obj:ItemList = ItemList(1, "fvdf", false)
         if (!cursor.moveToFirst()) {
             return null
         }
-        obj.id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID) as Int)
-        obj.nameDance = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
-        obj.isModernDance = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(
-            COLUMN_IS_MODERN
-        )))
-        return obj
+        var id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID))
+        var name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
+        var isModern = cursor.getString(cursor.getColumnIndex(COLUMN_IS_MODERN))
+        cursor.close()
+        database.close()
+        return ItemList(id, name, isModern.toBoolean())
     }
 
     fun insert(model: ItemList) {
         val content = ContentValues()
-        content.put(COLUMN_ID, model.id)
-        content.put(COLUMN_IS_MODERN, model.isModernDance)
         content.put(COLUMN_NAME, model.nameDance)
-        db?.insert(TABLE, null, content)
+        content.put(COLUMN_IS_MODERN, model.isModernDance)
+        val database = this.sqlHelper.writableDatabase
+        database.insert(TABLE, null, content)
     }
 
     fun update(model: ItemList) {
         val content = ContentValues()
-        content.put(COLUMN_ID, model.id)
-        content.put(COLUMN_IS_MODERN, model.isModernDance)
         content.put(COLUMN_NAME, model.nameDance)
+        content.put(COLUMN_IS_MODERN, model.isModernDance)
         val where = COLUMN_ID + " = " + model.id
-        db?.update(TABLE, content, where, null)
+        val database = this.sqlHelper.writableDatabase
+        database.update(TABLE, content, where, null)
     }
 
     fun delete(model: ItemList) {
+        val database = sqlHelper.writableDatabase
         val where = COLUMN_ID + " = " + model.id
-        db?.delete(TABLE, where, null)
+        database.delete(TABLE, where, null)
+    }
+
+    fun getElementCount(): Int {
+        return DatabaseUtils.queryNumEntries(db, TABLE).toInt()
     }
 }

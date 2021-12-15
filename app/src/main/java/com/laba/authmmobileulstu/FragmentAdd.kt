@@ -27,7 +27,7 @@ class FragmentAdd : Fragment(R.layout.fragment_add) {
         val newDanceName = viewbindingadd.addDanceNameElementEdit.text
         val newDanceId  = viewbindingadd.addDanceElementIdEdit.text.toString()
         var isModern = viewbindingadd.addDanceIsModern.text.toString()
-        var isDanceModern = checkIsDanceModer(isModern)
+        var isDanceModern = checkIsDanceModern(isModern)
         if (newDanceName.isNotEmpty() && newDanceId.isNotEmpty() && isModern.isNotEmpty()) {
             userViewModel.setItem(ItemList(Integer.parseInt(newDanceId), newDanceName.toString(),
                 isDanceModern ))
@@ -36,7 +36,7 @@ class FragmentAdd : Fragment(R.layout.fragment_add) {
         }
     }
 
-    fun checkIsDanceModer(isModern : String) : Boolean{
+    private fun checkIsDanceModern(isModern : String) : Boolean{
         if(isModern == "Да" || isModern == "да" || isModern == "Yes" || isModern == "yes" )
             return true
         else   if(isModern == "Нет" || isModern == "нет" || isModern == "No" || isModern == "no")

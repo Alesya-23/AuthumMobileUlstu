@@ -30,7 +30,7 @@ class FragmentChooseTypeStorage : Fragment(R.layout.fragment_choose_storage) {
                 var mainFragment: MainFragment = MainFragment.newInstance(typeData)
                 childFragmentManager.beginTransaction()
                     .addToBackStack(MainFragment::class.simpleName)
-                    .replace(R.id.choose, mainFragment)
+                    .replace(R.id.containerLayout, mainFragment)
                     .commit()
             }
         }

@@ -7,12 +7,13 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 
-
 class JSONHelper {
     private val  fileName: String = "user.json"
-    fun exportToJSON(context: Context, dataList: ArrayList<ItemList>): Boolean {
+    suspend fun exportToJSON(context: Context, dataList: List<ItemList>): Boolean {
         val gson = Gson()
-        val jsonString = gson.toJson(dataList)
+        val dataItems = DataItems()
+        dataItems.setUsers(dataList)
+        val jsonString = gson.toJson(dataItems)
         try {
             val fos: FileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
             fos.write(jsonString.toByteArray())
@@ -25,7 +26,7 @@ class JSONHelper {
         return false
     }
 
-    private fun loadJSONFromAsset(context: Context): String {
+    private suspend fun loadJSONFromAsset(context: Context): String {
         var json: String = ""
         try {
             val inputStream: InputStream = context.assets.open(fileName)
@@ -42,7 +43,7 @@ class JSONHelper {
         return json
     }
 
-    fun loadDataFromJson(context: Context): ArrayList<ItemList>? {
+    suspend fun loadDataFromJson(context: Context): List<ItemList>? {
         try {
             val jsonObject = JSONObject(loadJSONFromAsset(context))
             val jsonArray: JSONArray = jsonObject.getJSONArray("ItemLists")
@@ -61,7 +62,7 @@ class JSONHelper {
         return null
     }
 
-    fun deleteFile() {
+    suspend fun deleteFile() {
         val fdelete: File = File(fileName)
         if (fdelete.exists()) {
             if (fdelete.delete()) {

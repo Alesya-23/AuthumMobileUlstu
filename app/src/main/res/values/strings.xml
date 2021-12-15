@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">AuthmMobileUlstu</string>
+    <string name="widget_name">My first widget</string>
+    <string name="widget_text">Text in widget</string>
     <string name="delete">Удалить</string>
     <string name="refresh">Изменить</string>
     <string name="add">Добавить</string>
@@ -12,4 +14,8 @@
     <string name="in_date">Введите современный или нет танец (да/нет)</string>
     <string name="db_button">Данные из бд</string>
     <string name="json_button">Данные из json</string>
+    <string name="app_widget_description">Count of entities</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="textViewTaskTitle">Задачка: чтобы попасть в приложение найди известного танцора!</string>
 </resources>

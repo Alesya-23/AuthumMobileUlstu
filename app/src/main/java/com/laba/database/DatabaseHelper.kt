@@ -3,13 +3,14 @@ package com.laba.authmmobileulstu.database
 import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
+import android.provider.SyncStateContract.Helpers.insert
+import com.laba.authmmobileulstu.ItemList
+import com.laba.authmmobileulstu.ItemListAdapter
 
 const val DATABASE_NAME = "Dance.db" // название бд
 const val SCHEMA = 1 // версия базы данных
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, SCHEMA) {
-
-
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """CREATE TABLE IF NOT EXISTS dance (
